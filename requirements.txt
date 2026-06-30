@@ -1,0 +1,6 @@
+# Runtime dependencies for tools/knowledge_updater.py
+# The pipeline runs on the Python standard library by default (urllib + xml).
+# crawl4ai is OPTIONAL and only used for authoritative web-source crawling;
+# if it is absent the tool logs once and degrades gracefully (ArXiv still used).
+# Install optionally with:  pip install crawl4ai
+# crawl4ai>=0.4.0  # optional, uncomment to enable web-source crawling
