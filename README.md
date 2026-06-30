@@ -1,8 +1,6 @@
-# Financial Market Trend Analysis & Portfolio Allocation ? Agent Skill #143
+# Financial Market Trend Analysis & Portfolio Allocation 
 
-> A research-first, framework-grounded Claude agent skill that analyzes market trends and proposes **risk-aligned, diversified portfolio allocations** using classical risk-management theory ? Modern Portfolio Theory (Markowitz), CAPM, Fama-French, Black-Litterman, and Risk Parity ? plus a self-improving knowledge pipeline.
-
-**Cluster:** `finance-insurance` &nbsp;?&nbsp; **Skill idea:** 143 &nbsp;?&nbsp; **Status:** Production-ready (v1) &nbsp;?&nbsp; **License:** MIT
+> A research-first, framework-grounded Claude agent skill that analyzes market trends and proposes **risk-aligned, diversified portfolio allocations** using classical risk-management theory: Modern Portfolio Theory (Markowitz), CAPM, Fama-French, Black-Litterman, and Risk Parity: plus a self-improving knowledge pipeline.
 
 > **Disclaimer:** This skill is **educational only**. It is not investment, tax, or legal advice and never issues individualized buy/sell directives or guarantees. Outcomes are uncertain and you can lose money. Past performance does not guarantee future results. Consult a licensed, fiduciary advisor registered in your jurisdiction before acting.
 
@@ -42,7 +40,7 @@ It is part of the `finance-insurance` agent-skill cluster and is designed to be 
 
 ## How it works
 
-The skill is a **markdown harness** (`skills/main.md`) that orchestrates sub-skills in a fixed, gated order. Each stage emits a structured JSON-shaped payload carrying `stage`, `status`, `certainty`, and `limitations`, and downstream stages consume ? but never mutate ? upstream payloads.
+The skill is a **markdown harness** (`skills/main.md`) that orchestrates sub-skills in a fixed, gated order. Each stage emits a structured JSON-shaped payload carrying `stage`, `status`, `certainty`, and `limitations`, and downstream stages consume, but never mutate, upstream payloads.
 
 ```
 user request
@@ -113,11 +111,11 @@ Each dimension is scored 0-100 with at least one cited source or named framework
 
 ## Sub-skills
 
-- **`sub-intake`** ? structured intake schema, archetype classification (`allocation` / `concentration-risk` / `factor-tilt` / `compliance-block` / `degraded` / `other`), degraded-mode detection, batched clarifying questions.
-- **`sub-framework-selector`** ? candidate-framework fit scoring, archetype-to-framework mapping, operationalization (what each framework consumes and feeds).
-- **`sub-scoring-engine`** ? anchored 0-100 rubric with band descriptors, weighted total, citation enforcement, letter grade.
-- **`sub-improvement-roadmap`** ? effort (1-5) / impact (1-5) rubric, `priority = impact / effort` ordering, finding traceability, educational-only enforcement.
-- **`sub-compliance-check`** ? jurisdiction-aware disclaimers (generic / US SEC-FINRA / EU MiFID II-ESMA), disallowed-pattern detection, mandatory challenge-stage verification, remediation instructions on block.
+- **`sub-intake`** : structured intake schema, archetype classification (`allocation` / `concentration-risk` / `factor-tilt` / `compliance-block` / `degraded` / `other`), degraded-mode detection, batched clarifying questions.
+- **`sub-framework-selector`** : candidate-framework fit scoring, archetype-to-framework mapping, operationalization (what each framework consumes and feeds).
+- **`sub-scoring-engine`** : anchored 0-100 rubric with band descriptors, weighted total, citation enforcement, letter grade.
+- **`sub-improvement-roadmap`** : effort (1-5) / impact (1-5) rubric, `priority = impact / effort` ordering, finding traceability, educational-only enforcement.
+- **`sub-compliance-check`** : jurisdiction-aware disclaimers (generic / US SEC-FINRA / EU MiFID II-ESMA), disallowed-pattern detection, mandatory challenge-stage verification, remediation instructions on block.
 
 ## Quickstart
 
@@ -152,7 +150,7 @@ The harness runs the stages in order, honors the **blocking compliance gate**, a
 `tools/knowledge_updater.py` is a self-improving pipeline that grows `SECOND-KNOWLEDGE-BRAIN.md`. It uses the **ArXiv Atom API** for `q-fin.PM` / `q-fin.RM` (stdlib only) and optionally `crawl4ai` for authoritative web sources.
 
 ```bash
-# Offline check: fetch, parse, score, print ? but do NOT write
+# Offline check: fetch, parse, score, print but do NOT write
 python tools/knowledge_updater.py --dry-run --limit 10
 
 # Live append to the knowledge brain (ArXiv API; crawl4ai if installed)
@@ -173,26 +171,26 @@ python tools/knowledge_updater.py --verbose
 
 Two layers of validation:
 
-1. **Automated (offline, no network):** `tests/test_knowledge_updater.py` ? 21 tests covering ArXiv Atom parsing, dedup, relevance/recency scoring, ranking, dry-run behavior, append/dedup, and CLI config.
+1. **Automated (offline, no network):** `tests/test_knowledge_updater.py` : 21 tests covering ArXiv Atom parsing, dedup, relevance/recency scoring, ranking, dry-run behavior, append/dedup, and CLI config.
    ```bash
    pip install -r requirements-dev.txt
    pytest tests/test_knowledge_updater.py -q   # 21 passed
    ```
-2. **Behavior spec (for the LLM harness):** `tests/test-scenarios.md` ? 5 core scenarios (allocation, concentration risk, factor tilt, compliance gate, degraded mode) plus isolated gate tests, each with scenario-specific pass criteria mapped to the harness Quality Gates.
+2. **Behavior spec (for the LLM harness):** `tests/test-scenarios.md` : 5 core scenarios (allocation, concentration risk, factor tilt, compliance gate, degraded mode) plus isolated gate tests, each with scenario-specific pass criteria mapped to the harness Quality Gates.
 
 ## Degraded mode & error handling
 
 - **Degraded mode** triggers when `live_data_available = false` (explicit "offline" request or tool failure): live research is skipped, data-hungry frameworks are dropped (defaults to MPT + Risk Parity with textbook parameters), `Risk-adjusted return` is capped at 50 when no history exists, the deliverable opens with a prominent **"Degraded mode"** notice, and the roadmap includes an item to gather the missing live data.
-- **Missing inputs** ? `sub-intake` asks; the harness never guesses personal/financial facts.
-- **Conflicting evidence** ? present both, grade certainty, let the challenge stage weigh them.
-- **Tool failure** ? fall back to the knowledge base, set `live_data_available = false`, state the limitation.
-- **Compliance `block`** ? apply remediation and re-run from the affected stage; a blocked deliverable is never presented.
+- **Missing inputs** : `sub-intake` asks; the harness never guesses personal/financial facts.
+- **Conflicting evidence** : present both, grade certainty, let the challenge stage weigh them.
+- **Tool failure** : fall back to the knowledge base, set `live_data_available = false`, state the limitation.
+- **Compliance `block`** : apply remediation and re-run from the affected stage; a blocked deliverable is never presented.
 
 ## Safety & compliance
 
 This is a regulated/sensitive domain, so the bar is high:
 
-- The **compliance gate is BLOCKING** ? it runs before every final deliverable and attaches a jurisdiction-aware disclaimer (generic, US SEC/FINRA, or EU MiFID II/ESMA).
+- The **compliance gate is BLOCKING** : it runs before every final deliverable and attaches a jurisdiction-aware disclaimer (generic, US SEC/FINRA, or EU MiFID II/ESMA).
 - It detects and blocks disallowed patterns: individualized buy/sell directives, guaranteed returns, "risk-free / can't lose" claims, and market-manipulation framing.
 - No guarantees of outcomes; downside and loss-of-principal are stated explicitly.
 - The challenge stage is mandatory; skipping it is a compliance-gate failure.
@@ -252,9 +250,9 @@ Contributions are welcome. Please:
 
 1. Run the offline test suite before submitting: `pytest tests/test_knowledge_updater.py -q`.
 2. Keep sub-skill payloads conforming to the data contract (`stage`, `status`, `certainty`, `limitations`).
-3. Never introduce individualized buy/sell directives or guarantees ? the compliance gate must keep passing.
+3. Never introduce individualized buy/sell directives or guarantees, the compliance gate must keep passing.
 4. Add citations (DOI/URL) for any new framework or score basis.
 
 ## License
 
-MIT ? see [LICENSE](LICENSE).
+MIT see [LICENSE](LICENSE).
